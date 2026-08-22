@@ -36,3 +36,19 @@ application:
     hidden1: 128
     hidden2: 32
     output: 1
+traffic:
+  packet_bytes: 8
+
+  spike_rates_hz:
+    input: 200.0
+    hidden1: 27.98
+    hidden2: 67.67
+    output: 0.0
+
+  queue:
+    maximum_packets: 256
+    model: "deterministic_fluid"
+
+  timing:
+    router_processing_ms: 0.01
+    serialization_overhead_ms: 0.001
