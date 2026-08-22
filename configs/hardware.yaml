@@ -1,0 +1,38 @@
+hardware:
+  name: "SpiNNaker-style educational simulator"
+  topology: "hex_mesh"
+
+  grid:
+    width: 4
+    height: 4
+    wrap_around: false
+
+  chip:
+    processing_cores: 152
+    reserved_cores: 2
+    neurons_per_core: 32
+    routing_table_capacity: 1024
+
+  links:
+    directions:
+      - east
+      - northeast
+      - north
+      - west
+      - southwest
+      - south
+    bandwidth_packets_per_ms: 1000
+    latency_ms_per_hop: 0.1
+
+  simulation:
+    timestep_ms: 1.0
+    duration_ms: 100.0
+    random_seed: 42
+    overflow_policy: "record"
+
+application:
+  populations:
+    input: 1024
+    hidden1: 128
+    hidden2: 32
+    output: 1
