@@ -1,678 +1,243 @@
-<div align="center">
+# NeuroRoute
 
+**Neuromorphic model conversion, placement, multicast routing, and MLOps**
 
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-ANN-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2?logo=mlflow&logoColor=white)](https://mlflow.org/)
+[![DVC](https://img.shields.io/badge/DVC-Data_Versioning-945DD6?logo=dvc&logoColor=white)](https://dvc.org/)
+[![Tests](https://img.shields.io/badge/Tests-47_passing-success)](#testing)
 
-\# 🧠 NeuroRoute
+NeuroRoute is an end-to-end experimental pipeline for converting a molecular
+classification ANN into a spiking neural network and studying its deployment
+on a SpiNNaker-style neuromorphic architecture.
 
+It combines machine learning, spiking simulation, graph partitioning,
+connectivity-aware placement, multicast routing, traffic simulation, and MLOps
+in one reproducible project.
 
+---
 
-\### Neuromorphic model conversion, placement, multicast routing, and MLOps
+## Highlights
 
+| Capability | Implementation |
+|---|---|
+| Molecular data | BBBP validation and RDKit fingerprints |
+| Artificial neural network | PyTorch binary classifier |
+| Spiking neural network | ANN-to-SNN conversion with snnTorch |
+| Neural simulation | PyNN with the Brian2 backend |
+| SpiNNaker integration | sPyNNaker and PACMAN virtual-board mapping |
+| Deployment planning | Partitioning and connectivity-aware placement |
+| Network routing | Mesh routes and multicast route trees |
+| Hardware simulation | Router limits, bandwidth, queues, latency and drops |
+| Optimization | Optuna hyperparameter search |
+| MLOps | MLflow tracking, artifacts and Model Registry |
+| Data versioning | DVC-tracked raw and processed data |
+| Verification | 47 automated tests |
 
-
-\[!\[Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python\&logoColor=white)](https://www.python.org/)
-
-\[!\[PyTorch](https://img.shields.io/badge/PyTorch-ANN-EE4C2C?logo=pytorch\&logoColor=white)](https://pytorch.org/)
-
-\[!\[PyNN](https://img.shields.io/badge/PyNN-Brian2-6A5ACD)](https://neuralensemble.org/PyNN/)
-
-\[!\[SpiNNaker](https://img.shields.io/badge/sPyNNaker-Virtual\_Board-00A67E)](https://spinnakermanchester.github.io/)
-
-\[!\[MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2?logo=mlflow\&logoColor=white)](https://mlflow.org/)
-
-\[!\[DVC](https://img.shields.io/badge/DVC-Data\_Versioning-945DD6?logo=dvc\&logoColor=white)](https://dvc.org/)
-
-\[!\[Tests](https://img.shields.io/badge/Tests-47\_Passing-brightgreen)](#testing)
-
-
-
-NeuroRoute converts a molecular-classification neural network into a spiking
-
-network and evaluates how it can be partitioned, placed, and routed across a
-
-SpiNNaker-style neuromorphic architecture.
-
-
-
-</div>
-
-
-
-\---
-
-
-
-\## 📑 Contents
-
-
-
-\- \[Why NeuroRoute?](#-why-neuroroute)
-
-\- \[System architecture](#-system-architecture)
-
-\- \[Features](#-features)
-
-\- \[Results](#-results)
-
-\- \[Project structure](#-project-structure)
-
-\- \[Installation](#-installation)
-
-\- \[Running the project](#-running-the-project)
-
-\- \[MLOps workflow](#-mlops-workflow)
-
-\- \[Testing](#-testing)
-
-\- \[SpiNNaker integration](#-spinnaker-integration)
-
-\- \[Limitations](#-limitations)
-
-
-
-\## 🎯 Why NeuroRoute?
-
-
-
-Neuromorphic systems process information using spikes and distributed
-
-computation. Deploying an SNN requires more than training a model: populations
-
-must be partitioned into machine vertices, assigned to chips, connected using
-
-multicast routes, and checked against hardware limits.
-
-
-
-NeuroRoute provides an end-to-end experimental workflow for studying those
-
-deployment decisions.
-
-
-
-\## 🏗 System architecture
-
-
+## Architecture
 
 ```mermaid
-
 flowchart TD
-
-&#x20;   A\["BBBP molecules"] --> B\["RDKit fingerprints"]
-
-&#x20;   B --> C\["PyTorch ANN"]
-
-&#x20;   C --> D\["snnTorch SNN"]
-
-&#x20;   D --> E\["PyNN simulation"]
-
-&#x20;   D --> F\["Population partitioning"]
-
-&#x20;   F --> G\["Connectivity-aware placement"]
-
-&#x20;   G --> H\["Multicast route trees"]
-
-&#x20;   H --> I\["Bandwidth and timing simulation"]
-
-&#x20;   C --> J\["MLflow Registry"]
-
-&#x20;   A --> K\["DVC"]
-
-&#x20;   F --> L\["Optuna optimization"]
-
-&#x20;   J --> M\["Deployment bundle"]
-
-&#x20;   I --> M
-
+    A[BBBP molecules] --> B[RDKit fingerprints]
+    B --> C[PyTorch ANN]
+    C --> D[snnTorch SNN]
+    D --> E[PyNN simulation]
+    D --> F[Partitioning]
+    F --> G[Placement]
+    G --> H[Multicast routing]
+    H --> I[Link simulation]
+    C --> J[MLflow Registry]
+    F --> K[Optuna search]
+    J --> L[Deployment bundle]
+    I --> L
 ```
 
+## Results
 
-
-\## ✨ Features
-
-
-
-| Area | Implementation |
-
-|---|---|
-
-| Data | BBBP validation, RDKit fingerprints and deterministic splits |
-
-| ANN | PyTorch binary molecular classifier |
-
-| SNN | ANN-to-SNN conversion with snnTorch |
-
-| PyNN | Local simulation through the Brian2 backend |
-
-| SpiNNaker | Official sPyNNaker and PACMAN virtual-board mapping |
-
-| Partitioning | Population-to-machine-vertex decomposition |
-
-| Placement | Round-robin and connectivity-aware strategies |
-
-| Routing | Mesh routes and multicast route trees |
-
-| Hardware model | Chip, core, router-table and link constraints |
-
-| Traffic | Bandwidth, queue, latency and packet-drop simulation |
-
-| Optimization | Optuna partition hyperparameter search |
-
-| MLOps | MLflow experiments, artifacts and Model Registry |
-
-| Data versioning | DVC-tracked raw and processed data |
-
-| Deployment | Versioned bundle, checksums and independent validation |
-
-| Quality | 47 automated tests |
-
-
-
-\## 📊 Results
-
-
-
-\### ANN and SNN performance
-
-
+### Model performance
 
 | Model | Accuracy | ROC-AUC | Precision | Recall | F1 |
-
 |---|---:|---:|---:|---:|---:|
-
-| PyTorch ANN | \*\*0.8660\*\* | \*\*0.9143\*\* | 0.9447 | 0.8761 | \*\*0.9091\*\* |
-
+| PyTorch ANN | **0.8660** | **0.9143** | 0.9447 | 0.8761 | **0.9091** |
 | Converted SNN | 0.7124 | 0.9055 | 0.9679 | 0.6453 | 0.7744 |
 
+### Placement comparison
 
-
-The SNN retained a strong ROC-AUC while using spike-based computation.
-
-
-
-\### Placement optimization
-
-
-
-| Metric | Round-robin | Connectivity-aware | Change |
-
+| Metric | Round-robin | Connectivity-aware | Improvement |
 |---|---:|---:|---:|
+| Used chips | 16 | **10** | 37.50% fewer |
+| Independent unicast hops | 310 | **72** | 76.77% fewer |
+| Multicast tree links | 152 | **72** | 52.63% fewer |
+| Maximum router entries | 35 | 36 | Within capacity |
+| Maximum link route load | 24 | 24 | Unchanged |
 
-| Used chips | 16 | \*\*10\*\* | −37.50% |
+Connectivity-aware placement substantially reduced communication distance
+without causing router overflow.
 
-| Independent unicast hops | 310 | \*\*72\*\* | −76.77% |
-
-| Multicast tree links | 152 | \*\*72\*\* | −52.63% |
-
-| Maximum router entries | \*\*35\*\* | 36 | +2.86% |
-
-| Maximum link route load | 24 | 24 | No change |
-
-
-
-> Connectivity-aware placement substantially reduced communication distance
-
-> while remaining within router capacity.
-
-
-
-\### Link simulation
-
-
+### Link simulation
 
 | Metric | Result |
-
 |---|---:|
-
 | Active directed links | 22 |
-
 | Source packets | 21,054.69 |
-
 | Link transmissions | 93,003.30 |
-
-| Peak utilization | 15.36% |
-
+| Peak link utilization | 15.36% |
 | Average route latency | 0.408 ms |
-
 | Maximum route latency | 0.666 ms |
-
 | Maximum queue | 0 packets |
+| Dropped packets | **0** |
+| Overloaded links | **0** |
 
-| Dropped packets | \*\*0\*\* |
+### Best partition configuration
 
-| Overloaded links | \*\*0\*\* |
+| Parameter | Value |
+|---|---:|
+| Neurons per core | 64 |
+| Application cores per chip | 7 |
+| Used chips | 3 |
+| Machine vertices | 20 |
+| Multicast tree links | 14 |
+| Maximum router entries | 19 |
+| Router overflow events | 0 |
+| Objective score | 55.25 |
 
+## Quick start
 
+### 1. Create the main environment
 
-\### Hyperparameter optimization
-
-
-
-Optuna selected:
-
-
-
-```yaml
-
-neurons\_per\_core: 64
-
-max\_application\_cores\_per\_chip: 7
-
-used\_chips: 3
-
-machine\_vertices: 20
-
-multicast\_tree\_links: 14
-
-maximum\_router\_entries: 19
-
-router\_overflow\_events: 0
-
-objective\_score: 55.25
-
+```cmd
+py -3.11 -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements-lock.txt
 ```
 
+### 2. Start MLflow
 
+```cmd
+start "NeuroRoute MLflow" cmd /K "call .venv\Scripts\activate && mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000"
+```
 
-\## 📁 Project structure
+Open `http://127.0.0.1:5000` in a browser.
 
+### 3. Run the core pipeline
 
+```cmd
+python -m src.neuroroute.data_prep --config configs\baseline.yaml
+python -m src.neuroroute.train_ann --config configs\baseline.yaml
+python -m src.neuroroute.convert_snn --config configs\snn.yaml
+python -m src.neuroroute.partition_compare
+python -m src.neuroroute.link_sim --config configs\hardware.yaml
+python -m src.neuroroute.validate_deployment
+```
+
+### 4. Run the tests
+
+```cmd
+pytest -v
+```
+
+Expected result:
 
 ```text
-
-neuroroute/
-
-├── configs/                     # Experiment and hardware configurations
-
-├── data/                        # DVC-managed datasets
-
-├── src/neuroroute/
-
-│   ├── data\_prep.py             # BBBP preprocessing
-
-│   ├── train\_ann.py             # ANN training and MLflow logging
-
-│   ├── convert\_snn.py           # ANN-to-SNN conversion
-
-│   ├── pynn\_demo.py             # PyNN/Brian2 example
-
-│   ├── partition\_sim.py         # Population partitioning
-
-│   ├── placement.py             # Placement algorithms
-
-│   ├── routing.py               # Point-to-point routing
-
-│   ├── multicast.py             # Multicast route trees
-
-│   ├── link\_sim.py              # Bandwidth and latency simulation
-
-│   ├── hpo\_partition.py         # Optuna optimization
-
-│   ├── promote\_model.py         # MLflow model promotion
-
-│   ├── package\_deployment.py    # Deployment packaging
-
-│   └── validate\_deployment.py   # Bundle validation
-
-├── tests/                       # Automated tests
-
-├── requirements-lock.txt
-
-├── requirements-spinnaker-lock.txt
-
-└── README.md
-
+47 passed
 ```
 
+## SpiNNaker environment
 
-
-\## ⚙️ Installation
-
-
-
-\### Main environment
-
-
+sPyNNaker is isolated from the main ML dependencies:
 
 ```cmd
-
-py -3.11 -m venv .venv
-
-.venv\\Scripts\\activate
-
-python -m pip install --upgrade pip setuptools wheel
-
-python -m pip install -r requirements-lock.txt
-
-```
-
-
-
-\### Separate sPyNNaker environment
-
-
-
-```cmd
-
 py -3.11 -m venv .venv-spinnaker
-
-.venv-spinnaker\\Scripts\\activate
-
+.venv-spinnaker\Scripts\activate
 python -m pip install -r requirements-spinnaker-lock.txt
-
 ```
 
-
-
-The separate environment prevents sPyNNaker dependencies from conflicting with
-
-the main ML environment.
-
-
-
-\## ▶️ Running the project
-
-
-
-Activate the main environment:
-
-
-
-```cmd
-
-.venv\\Scripts\\activate
-
-```
-
-
-
-\### 1. Start MLflow
-
-
-
-```cmd
-
-start "NeuroRoute MLflow" cmd /K "call .venv\\Scripts\\activate \&\& mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlartifacts --host 127.0.0.1 --port 5000"
-
-```
-
-
-
-Open \[http://127.0.0.1:5000](http://127.0.0.1:5000).
-
-
-
-\### 2. Prepare data
-
-
-
-```cmd
-
-python -m src.neuroroute.data\_prep --config configs\\baseline.yaml
-
-```
-
-
-
-\### 3. Train the ANN
-
-
-
-```cmd
-
-python -m src.neuroroute.train\_ann --config configs\\baseline.yaml
-
-```
-
-
-
-\### 4. Convert to an SNN
-
-
-
-```cmd
-
-python -m src.neuroroute.convert\_snn --config configs\\snn.yaml
-
-```
-
-
-
-\### 5. Run the PyNN demonstration
-
-
-
-```cmd
-
-python -m src.neuroroute.pynn\_demo
-
-```
-
-
-
-\### 6. Compare placement strategies
-
-
-
-```cmd
-
-python -m src.neuroroute.partition\_compare
-
-```
-
-
-
-\### 7. Simulate link traffic
-
-
-
-```cmd
-
-python -m src.neuroroute.link\_sim --config configs\\hardware.yaml
-
-```
-
-
-
-\### 8. Optimize partitioning
-
-
-
-```cmd
-
-python -m src.neuroroute.hpo\_partition
-
-```
-
-
-
-\### 9. Validate deployment
-
-
-
-```cmd
-
-python -m src.neuroroute.validate\_deployment
-
-```
-
-
-
-\## 🔄 MLOps workflow
-
-
+The project demonstrates:
+
+- PyNN simulation through Brian2
+- Official sPyNNaker installation
+- Virtual SpiNNaker-5 board setup
+- PACMAN partitioning and mapping
+- SpiNNaker toolchain readiness checks
+
+## MLOps workflow
 
 ```mermaid
-
 flowchart LR
-
-&#x20;   A\["DVC data"] --> B\["Training"]
-
-&#x20;   B --> C\["MLflow run"]
-
-&#x20;   C --> D\["Candidate"]
-
-&#x20;   D --> E\["Champion"]
-
-&#x20;   E --> F\["Validated bundle"]
-
+    A[DVC data] --> B[Training]
+    B --> C[MLflow run]
+    C --> D[Candidate]
+    D --> E[Champion]
+    E --> F[Validated bundle]
 ```
 
+MLflow records parameters, metrics, models, plots, optimization trials,
+partitioning comparisons, and deployment events. The ANN is registered as
+`NeuroRoute-BBBP-ANN` and promoted with the `candidate` and `champion` aliases.
 
-
-MLflow tracks:
-
-
-
-\- Configurations and hyperparameters
-
-\- Training and validation curves
-
-\- ANN and SNN metrics
-
-\- Partitioning comparisons
-
-\- Optuna parent and child runs
-
-\- Models and artifacts
-
-\- Deployment-validation events
-
-
-
-The ANN is registered as:
-
-
+## Project structure
 
 ```text
-
-NeuroRoute-BBBP-ANN
-
+neuroroute/
+|-- configs/                     Experiment and hardware configuration
+|-- data/                        DVC-managed datasets
+|-- src/neuroroute/              Application source code
+|   |-- data_prep.py             BBBP preprocessing
+|   |-- train_ann.py             ANN training
+|   |-- convert_snn.py           SNN conversion
+|   |-- pynn_demo.py             PyNN/Brian2 demonstration
+|   |-- partition_sim.py         Population partitioning
+|   |-- placement.py             Placement algorithms
+|   |-- routing.py               Point-to-point routing
+|   |-- multicast.py             Multicast route trees
+|   |-- link_sim.py              Bandwidth and timing simulation
+|   |-- hpo_partition.py         Optuna optimization
+|   |-- promote_model.py         MLflow model promotion
+|   |-- package_deployment.py    Deployment packaging
+|   `-- validate_deployment.py   Deployment validation
+|-- tests/                       Automated tests
+|-- requirements-lock.txt
+|-- requirements-spinnaker-lock.txt
+`-- README.md
 ```
 
+## Testing
 
+The 47-test suite covers:
 
-Promotion uses the `candidate` and `champion` aliases.
+- Data validation and deterministic splitting
+- ANN outputs and saved artifacts
+- Partition and placement constraints
+- Mesh routing and boundary behavior
+- Multicast tree correctness
+- Link bandwidth and latency calculations
+- Queues and packet drops
 
+## Scope and limitations
 
+- The project was not run on physical SpiNNaker hardware because an authorized
+  board or spalloc account was unavailable.
+- Official virtual mapping targets the installed SpiNNaker-5 toolchain.
+- The custom router model is an architectural simulator, not a cycle-accurate
+  or bit-exact SpiNNaker2 implementation.
+- ANN and SNN experiments use CPU execution.
+- BBBP is the current demonstration dataset.
 
-\## ✅ Testing
+## Future work
 
+- Execute through an authorized spalloc service
+- Compare simulation estimates with hardware counters
+- Add cycle-level router arbitration
+- Add fault-aware placement and rerouting
+- Support more molecular datasets
+- Add continuous integration and container deployment
 
+## License
 
-Run the complete test suite:
+This project is intended for educational and research use.
 
+---
 
-
-```cmd
-
-pytest -v
-
-```
-
-
-
-Verified result:
-
-
-
-```text
-
-47 passed in 19.13s
-
-```
-
-
-
-Tests cover data preparation, model output, artifact loading, partition
-
-constraints, placement, routing, multicast trees, bandwidth, latency, queues,
-
-and packet drops.
-
-
-
-\## 🧩 SpiNNaker integration
-
-
-
-NeuroRoute demonstrates:
-
-
-
-\- PyNN API familiarity using Brian2
-
-\- Official sPyNNaker installation
-
-\- Virtual SpiNNaker-5 board setup
-
-\- PACMAN graph partitioning and mapping
-
-\- Integration-readiness checks for the SpiNNaker toolchain
-
-
-
-A physical board or authorized spalloc account was not available, so the
-
-project does \*\*not\*\* claim physical-hardware execution.
-
-
-
-\## ⚠️ Limitations
-
-
-
-\- No physical SpiNNaker/spalloc execution
-
-\- Virtual mapping uses the installed SpiNNaker-5 toolchain
-
-\- Router simulation is architectural, not cycle-accurate
-
-\- No claim of bit-exact SpiNNaker2 router behavior
-
-\- ANN and SNN experiments used CPU execution
-
-\- Demonstration currently uses only the BBBP dataset
-
-
-
-\## 🔮 Future work
-
-
-
-\- Execute the mapped network through an authorized spalloc service
-
-\- Validate simulation estimates against hardware counters
-
-\- Add cycle-level router arbitration
-
-\- Add fault-aware placement and rerouting
-
-\- Support additional molecular datasets
-
-\- Add continuous integration and container deployment
-
-
-
-\## 📜 License
-
-
-
-This repository is intended for educational and research use.
-
-
-
-\---
-
-
-
-<div align="center">
-
-
-
-\*\*NeuroRoute — from neural models to neuromorphic routes\*\*
-
-
-
-</div>
-
+**NeuroRoute: from neural models to neuromorphic routes.**
