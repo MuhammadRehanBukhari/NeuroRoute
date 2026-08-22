@@ -7,6 +7,7 @@ annotated-types==0.8.0
 anyio==4.14.2
 attrs==26.1.0
 blinker==1.9.0
+Brian2==2.9.0
 cachetools==7.1.7
 certifi==2026.7.22
 cffi==2.1.1
@@ -17,6 +18,7 @@ colorama==0.4.6
 contourpy==1.3.3
 cryptography==49.0.0
 cycler==0.12.1
+Cython==3.3.0
 databricks-sdk==0.133.0
 docker==7.2.0
 fastapi==0.141.1
@@ -42,6 +44,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 joblib==1.5.3
 kiwisolver==1.5.0
+lazyarray==0.7.0
 Mako==1.4.1
 MarkupSafe==3.0.3
 matplotlib==3.11.1
@@ -51,8 +54,9 @@ mlflow-tracing==3.15.1
 mpmath==1.3.0
 multidict==6.7.1
 narwhals==2.25.0
+neo==0.14.5
 networkx==3.6.1
-numpy==2.4.6
+numpy==1.26.4
 opentelemetry-api==1.44.0
 opentelemetry-proto==1.44.0
 opentelemetry-sdk==1.44.0
@@ -64,6 +68,7 @@ pluggy==1.6.0
 prettytable==3.18.0
 propcache==0.5.2
 protobuf==6.33.6
+py-cpuinfo==9.0.0
 pyarrow==25.0.1
 pyasn1==0.6.4
 pyasn1_modules==0.4.2
@@ -71,6 +76,7 @@ pycparser==3.0
 pydantic==2.13.4
 pydantic_core==2.46.4
 Pygments==2.21.0
+PyNN==0.13.0
 pyparsing==3.3.2
 pytest==9.1.1
 python-dateutil==2.9.0.post0
@@ -78,6 +84,7 @@ python-dotenv==1.2.3
 pytz==2026.3.post1
 pywin32==312
 PyYAML==6.0.3
+quantities==0.16.4
 rdkit==2026.3.5
 requests==2.34.2
 scikit-learn==1.9.0
