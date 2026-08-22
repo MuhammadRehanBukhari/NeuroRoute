@@ -1,0 +1,18 @@
+project:
+  name: neuroroute
+  seed: 42
+
+data:
+  raw_path: data/raw/BBBP.csv
+  processed_dir: data/processed
+  smiles_column: smiles
+  label_column: p_np
+
+fingerprint:
+  radius: 2
+  n_bits: 1024
+
+split:
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
