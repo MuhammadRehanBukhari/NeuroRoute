@@ -1,0 +1,14 @@
+partition:
+  name: "naive_round_robin"
+  strategy: "round_robin"
+  hardware_config: "configs/hardware.yaml"
+
+  constraints:
+    max_application_cores_per_chip: 4
+
+  output:
+    path: "artifacts/partition/naive_partition.json"
+
+  mlflow:
+    experiment_name: "NeuroRoute-Partitioning"
+    run_name: "naive_round_robin"

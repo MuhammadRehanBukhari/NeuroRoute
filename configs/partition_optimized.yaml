@@ -1,0 +1,19 @@
+partition:
+  name: "connectivity_aware"
+  strategy: "connectivity_aware"
+  hardware_config: "configs/hardware.yaml"
+
+  constraints:
+    max_application_cores_per_chip: 4
+
+  optimization:
+    objective: "minimize_weighted_hop_count"
+    prefer_central_chips: true
+    deterministic_tie_breaking: true
+
+  output:
+    path: "artifacts/partition/optimized_partition.json"
+
+  mlflow:
+    experiment_name: "NeuroRoute-Partitioning"
+    run_name: "optimized_connectivity_aware"
