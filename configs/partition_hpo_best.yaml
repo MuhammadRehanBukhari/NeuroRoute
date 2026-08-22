@@ -1,0 +1,21 @@
+partition:
+  name: "hpo_best_connectivity_aware"
+  strategy: "connectivity_aware"
+  hardware_config: "configs/hardware_hpo_best.yaml"
+
+  constraints:
+    max_application_cores_per_chip: 7
+
+  optimization:
+    objective: "weighted_deployment_cost"
+    optuna_trial: 14
+    objective_score: 55.25
+    prefer_central_chips: true
+    deterministic_tie_breaking: true
+
+  output:
+    path: "artifacts/partition/hpo_best_partition.json"
+
+  mlflow:
+    experiment_name: "NeuroRoute-HPO"
+    run_name: "hpo_best_validation"
