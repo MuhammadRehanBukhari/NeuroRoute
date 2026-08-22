@@ -1,0 +1,5 @@
+outs:
+- md5: bf2299b03209356be4d1ea6c133d69d7
+  size: 35758
+  hash: md5
+  path: test.npz
