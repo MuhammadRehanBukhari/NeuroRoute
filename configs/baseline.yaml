@@ -16,3 +16,21 @@ split:
   train_fraction: 0.70
   validation_fraction: 0.15
   test_fraction: 0.15
+
+model:
+  input_size: 1024
+  hidden_sizes:
+    - 128
+    - 32
+  dropout: 0.20
+
+training:
+  epochs: 20
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  decision_threshold: 0.50
+
+mlflow:
+  tracking_uri: http://127.0.0.1:5000
+  experiment_name: NeuroRoute-ANN
