@@ -1,0 +1,25 @@
+project:
+  name: neuroroute
+  seed: 42
+
+source_ann:
+  checkpoint_path: artifacts/ann/best_ann.pt
+  mlflow_run_id: 8037001c9f164e2c91f81484447c1abb8
+
+data:
+  validation_path: data/processed/validation.npz
+  test_path: data/processed/test.npz
+
+snn:
+  num_steps: 25
+  beta: 0.90
+  threshold: 1.0
+  input_rate_scale: 0.20
+  decision_threshold: 0.50
+
+evaluation:
+  batch_size: 32
+
+mlflow:
+  tracking_uri: http://127.0.0.1:5000
+  experiment_name: NeuroRoute-SNN
