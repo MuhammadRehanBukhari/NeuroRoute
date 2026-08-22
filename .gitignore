@@ -9,3 +9,5 @@ artifacts/
 *.db 
 
 
+.venv-spinnaker/
+reports/
